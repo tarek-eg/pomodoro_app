@@ -6,11 +6,12 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { timerReducers } from "./reducers/timerReducers";
 import { timerEpics } from "./epics/timerEpics";
 import * as timerActions from "./actions/timerActions";
+import { cacheEpics } from "./epics/cacheEpics";
 
 export type IRootState = StateType<typeof rootReducer>;
 export type IRootActions = ActionType<typeof timerActions>;
 
-const rootEpic: Epic = combineEpics(timerEpics);
+const rootEpic: Epic = combineEpics(timerEpics, cacheEpics);
 
 const rootReducer = combineReducers({
   timer: timerReducers

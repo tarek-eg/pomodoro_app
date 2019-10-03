@@ -4,6 +4,7 @@ import { IRootActions } from "../index";
 import { Actions } from "../actions/constants";
 
 import { Time } from "../../time";
+import { SimpleTime } from "../epics/cacheEpics";
 
 export interface IStateTimer {
   counting: boolean;
@@ -13,16 +14,26 @@ export interface IStateTimer {
   timeLine: Time[];
 }
 
+const cache = () => {
+  try {
+    let cachedData = localStorage.getItem("cache");
+    if (cachedData) {
+      let t = JSON.parse(cachedData);
+      return t.timeLine.map(
+        (time: SimpleTime) => new Time(time.minutes, time.seconds, time.name)
+      );
+    }
+    return [];
+  } catch (e) {
+    console.log("no cache");
+  }
+};
 const initialState: IStateTimer = {
   counting: false,
   timeLeft: new Time(0, 10),
   duration: new Time(0, 10),
   notifications: [],
-  timeLine: [
-    new Time(5, 10, "Coffe Break"),
-    new Time(25, 0, "Lunch Break"),
-    new Time(25, 0, "Pomodoro")
-  ]
+  timeLine: [...cache()]
 };
 
 export const timerReducers: Reducer<IStateTimer, IRootActions> = (

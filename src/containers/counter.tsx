@@ -61,11 +61,21 @@ const Counter: React.FC<Props> = ({
     setTime(new Time(minutes, seconds, name));
   };
 
+  const changeTime = (minutes: number, seconds: number) => () => {
+    setTime(
+      new Time(
+        duration.minutes + minutes,
+        duration.seconds + seconds,
+        duration.name
+      )
+    );
+  };
+
   return (
     <Container>
       <PomodoroButtons handleClick={setTaskTime} />
 
-      <CountDown timeLeft={timeLeft} />
+      <CountDown changeTime={changeTime} timeLeft={timeLeft} />
 
       <PlayButtons
         resetTimer={resetTimer}

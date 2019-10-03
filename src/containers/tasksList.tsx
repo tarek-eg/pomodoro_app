@@ -6,7 +6,8 @@ import {
   faCoffee,
   faHamburger,
   faBriefcase,
-  IconDefinition
+  IconDefinition,
+  faTimes
 } from "@fortawesome/free-solid-svg-icons";
 
 import { IRootState } from "../state";
@@ -25,24 +26,33 @@ const List = styled.ul`
   flex-direction: column;
   margin: 0;
   width: 100%;
-  padding: 15px;
+  padding: 0;
 `;
 
-const ListItem = styled.li`
+const ListItem = styled.li<{ isPomodoro: boolean }>`
   display: flex;
   align-items: center;
-  padding: 10px 0;
+  justify-content: space-between;
+  padding: 10px 20px;
   border-bottom: 1px solid #8785a2;
+  background: ${({ isPomodoro }) =>
+    isPomodoro ? "linear-gradient(45deg, #ffe2e2, #f6f6f6);" : "transparent"};
+  font-weight: ${({ isPomodoro }) => (isPomodoro ? 600 : 400)};
 `;
 
 const Text = styled.span`
-  &:not(:last-of-type) {
-    margin-right: 7px;
-  }
+  margin-right: 10px;
 `;
 
 const StyledIcon = styled(FontAwesomeIcon)`
-  margin-right: 7px;
+  &:not(:last-of-type) {
+    margin-right: 10px;
+  }
+`;
+
+const DeleteIcon = styled(FontAwesomeIcon)`
+  cursor: pointer;
+  font-size: 1.2rem;
 `;
 
 interface IStateProps {
@@ -68,13 +78,15 @@ const TasksList: React.FC<IStateProps> = ({ timeLine }) => {
   return (
     <Container>
       <List>
-        {timeLine.map(time => {
+        {timeLine.map((time, index) => {
+          console.log(time);
           return (
-            <ListItem>
+            <ListItem isPomodoro={time.name === "Pomodoro"} key={index}>
               <StyledIcon icon={mapNameToIcon[time.name]} />{" "}
               <Text>{time.name}</Text>
               <Text>|</Text>
               <Text>{time.toString()}</Text>
+              <DeleteIcon icon={faTimes} />
             </ListItem>
           );
         })}

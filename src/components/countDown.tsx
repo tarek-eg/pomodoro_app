@@ -2,14 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { Time } from "../time";
-
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  flex: 1;
-`;
+import { PlayButton } from "./playButtons";
 
 export const PomodoroButton = styled.button`
   width: 200px;
@@ -38,13 +31,23 @@ const TimerContainer = styled.div`
   display: flex;
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 interface Props {
   timeLeft: Time;
+  changeTime(minues: number, seconds: number): any;
 }
 
-export const CountDown: React.FC<Props> = ({ timeLeft }) => {
+export const CountDown: React.FC<Props> = ({ timeLeft, changeTime }) => {
   return (
     <TimerContainer>
+      <ButtonContainer>
+        <PlayButton onClick={changeTime(1, 0)}> +1</PlayButton>
+        <PlayButton onClick={changeTime(-1, 0)}> -1</PlayButton>
+      </ButtonContainer>
       <Timer>
         {timeLeft.toString().substring(0, timeLeft.toString().indexOf(":"))}
       </Timer>
@@ -52,6 +55,10 @@ export const CountDown: React.FC<Props> = ({ timeLeft }) => {
       <Timer>
         {timeLeft.toString().substring(timeLeft.toString().indexOf(":") + 1)}
       </Timer>
+      <ButtonContainer>
+        <PlayButton onClick={changeTime(0, 10)}> +10</PlayButton>
+        <PlayButton onClick={changeTime(0, -10)}> -10</PlayButton>
+      </ButtonContainer>
     </TimerContainer>
   );
 };
