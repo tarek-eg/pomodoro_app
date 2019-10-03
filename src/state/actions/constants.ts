@@ -1,0 +1,6 @@
+export const SET_TIME = "SET_TIME";
+export const START_TIMER = "START_TIMER";
+export const STOP_TIMER = "STOP_TIMER";
+export const COUNT_DOWN_ONE_SECOND = "COUNT_DOWN_ONE_SECOND";
+export const COUNT_DOWN_FINISHED = "COUNT_DOWN_FINISHED";
+export const ADD_NOTIFICATION = "ADD_NOTIFICATION";
