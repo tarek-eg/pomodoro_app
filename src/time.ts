@@ -1,10 +1,12 @@
 export class Time {
   public readonly minutes: number;
   public readonly seconds: number;
+  public readonly name: string;
 
-  constructor(minutes: number = 0, seconds: number = 0) {
+  constructor(minutes: number = 0, seconds: number = 0, name: string = "Task") {
     this.minutes = Time.clamp(minutes, 0, 99);
     this.seconds = Time.clamp(seconds, 0, 59);
+    this.name = name;
   }
 
   public toString() {
@@ -38,5 +40,6 @@ export class Time {
     return Math.max(min, Math.min(x, max));
   }
 
-  public static fromTime = (time: Time) => new Time(time.minutes, time.seconds);
+  public static fromTime = (time: Time) =>
+    new Time(time.minutes, time.seconds, time.name);
 }

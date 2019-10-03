@@ -1,13 +1,7 @@
 import { Reducer } from "redux";
 
 import { IRootActions } from "../index";
-import {
-  COUNT_DOWN_ONE_SECOND,
-  SET_TIME,
-  START_TIMER,
-  STOP_TIMER,
-  ADD_NOTIFICATION
-} from "../actions/constants";
+import { Actions } from "../actions/constants";
 
 import { Time } from "../../time";
 
@@ -16,13 +10,19 @@ export interface IStateTimer {
   timeLeft: Time;
   duration: Time;
   notifications: ReadonlyArray<Notification>;
+  timeLine: Time[];
 }
 
 const initialState: IStateTimer = {
   counting: false,
   timeLeft: new Time(0, 10),
   duration: new Time(0, 10),
-  notifications: []
+  notifications: [],
+  timeLine: [
+    new Time(5, 10, "Coffe Break"),
+    new Time(25, 0, "Lunch Break"),
+    new Time(25, 0, "Pomodoro")
+  ]
 };
 
 export const timerReducers: Reducer<IStateTimer, IRootActions> = (
@@ -30,7 +30,7 @@ export const timerReducers: Reducer<IStateTimer, IRootActions> = (
   action
 ) => {
   switch (action.type) {
-    case SET_TIME:
+    case Actions.SET_TIME:
       const time = Time.fromTime(action.payload);
 
       return {
@@ -39,7 +39,7 @@ export const timerReducers: Reducer<IStateTimer, IRootActions> = (
         duration: time
       };
 
-    case START_TIMER:
+    case Actions.START_TIMER:
       state.notifications.forEach(notification => notification.close());
 
       return {
@@ -50,19 +50,25 @@ export const timerReducers: Reducer<IStateTimer, IRootActions> = (
         notifications: []
       };
 
-    case STOP_TIMER:
+    case Actions.STOP_TIMER:
       return {
         ...state,
         counting: false
       };
 
-    case COUNT_DOWN_ONE_SECOND:
+    case Actions.COUNT_DOWN_ONE_SECOND:
       return {
         ...state,
         timeLeft: state.timeLeft.reduceByOneSecond()
       };
 
-    case ADD_NOTIFICATION:
+    case Actions.COUNT_DOWN_FINISHED:
+      return {
+        ...state,
+        timeLine: [...state.timeLine, action.payload]
+      };
+
+    case Actions.ADD_NOTIFICATION:
       return {
         ...state,
         notifications: [action.payload, ...state.notifications]

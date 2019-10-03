@@ -12,12 +12,7 @@ import { isOfType } from "typesafe-actions";
 
 import { IRootActions, IRootState } from "../index";
 import * as timerActions from "../actions/timerActions";
-import {
-  COUNT_DOWN_ONE_SECOND,
-  START_TIMER,
-  STOP_TIMER,
-  COUNT_DOWN_FINISHED
-} from "../actions/constants";
+import { Actions } from "../actions/constants";
 import { notify } from "../../utils/notifications";
 
 const SOUND_EFFECT = new Audio(
@@ -29,10 +24,10 @@ const { stopTimer, countDownFinished, countDownOneSecond } = timerActions;
 
 export const startTimerEpic: EpicType = action$ =>
   action$.pipe(
-    filter(isOfType(START_TIMER)),
+    filter(isOfType(Actions.START_TIMER)),
     switchMap(() =>
       interval(1000).pipe(
-        takeUntil(action$.pipe(filter(isOfType(STOP_TIMER)))),
+        takeUntil(action$.pipe(filter(isOfType(Actions.STOP_TIMER)))),
         mapTo(countDownOneSecond())
       )
     )
@@ -40,18 +35,23 @@ export const startTimerEpic: EpicType = action$ =>
 
 export const countDownFinishedEpic: EpicType = (action$, state$) =>
   action$.pipe(
-    filter(isOfType(COUNT_DOWN_ONE_SECOND)),
+    filter(isOfType(Actions.COUNT_DOWN_ONE_SECOND)),
     filter(() => {
-      const { timeLeft } = state$.value.timer;
+      const {
+        timeLeft: { minutes, seconds }
+      } = state$.value.timer;
 
-      return timeLeft.minutes === 0 && timeLeft.seconds === 0;
+      return minutes === 0 && seconds === 0;
     }),
-    mergeMap(() => [stopTimer(), countDownFinished()])
+    mergeMap(() => [
+      stopTimer(),
+      countDownFinished(state$.value.timer.duration)
+    ])
   );
 
-export const alertEpic: EpicType = (action$, state$) => {
+export const alertEpic: EpicType = action$ => {
   return action$.pipe(
-    filter(isOfType(COUNT_DOWN_FINISHED)),
+    filter(isOfType(Actions.COUNT_DOWN_FINISHED)),
     flatMap(() => {
       return [
         notify("Time's up!", {

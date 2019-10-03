@@ -1,9 +1,12 @@
 import React from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlay, faPause } from "@fortawesome/free-solid-svg-icons";
+
 import { IRootState } from "../state";
 import { Time } from "../time";
 import { startTimer, stopTimer, setTime } from "../state/actions/timerActions";
-import { connect } from "react-redux";
 
 const Container = styled.div`
   display: flex;
@@ -69,6 +72,9 @@ const PlayButton = styled.button`
     background: #ebebeb;
   }
 `;
+const ButtonLabel = styled.span`
+  margin-left: 5px;
+`;
 
 interface IStateProps {
   counting: boolean;
@@ -83,9 +89,11 @@ const mapState = ({ timer }: IRootState): IStateProps => ({
 });
 
 const mapActions = { startTimer, stopTimer, setTime };
+
 type DispatchProps = typeof mapActions;
 
 type Props = DispatchProps & IStateProps;
+
 const Counter: React.FC<Props> = ({
   counting,
   duration,
@@ -103,25 +111,27 @@ const Counter: React.FC<Props> = ({
     setTime(Time.fromTime(duration));
   };
 
-  const setCoffeBreakTime = () => {
+  const setTaskTime = (
+    name: string,
+    minutes: number,
+    seconds: number = 0
+  ) => () => {
     stopTimer();
-    setTime(new Time(5, 0));
+    setTime(new Time(minutes, seconds, name));
   };
 
-  const setPomodoroTime = () => {
-    stopTimer();
-    setTime(new Time(25, 0));
-  };
-  const setLunchBreakTime = () => {
-    stopTimer();
-    setTime(new Time(30, 0));
-  };
   return (
     <Container>
       <ButtonsContainer>
-        <CoffeButton onClick={setLunchBreakTime}>Lunch break</CoffeButton>
-        <PomodoroButton onClick={setPomodoroTime}>Pomodoro</PomodoroButton>
-        <CoffeButton onClick={setCoffeBreakTime}>Cofee break</CoffeButton>
+        <CoffeButton onClick={setTaskTime("Lunch Break", 30)}>
+          Lunch break
+        </CoffeButton>
+        <PomodoroButton onClick={setTaskTime("Pomodor", 25)}>
+          Pomodoro
+        </PomodoroButton>
+        <CoffeButton onClick={setTaskTime("Coffe Break", 0, 1)}>
+          Cofee break
+        </CoffeButton>
       </ButtonsContainer>
       <TimerContainer>
         <Timer>
@@ -134,9 +144,12 @@ const Counter: React.FC<Props> = ({
       </TimerContainer>
       <PlayButtonsContainer>
         <PlayButton onClick={toggleTimer}>
-          {counting ? "Pause" : "Start"}
+          <FontAwesomeIcon icon={faPlay} />{" "}
+          <ButtonLabel>{counting ? "Pause" : "Start"}</ButtonLabel>
         </PlayButton>
-        <PlayButton onClick={resetTimer}>Reset</PlayButton>
+        <PlayButton onClick={resetTimer}>
+          <FontAwesomeIcon icon={faPause} /> <ButtonLabel>Reset</ButtonLabel>
+        </PlayButton>
       </PlayButtonsContainer>
     </Container>
   );

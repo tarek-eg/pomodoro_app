@@ -2,19 +2,18 @@ import React from "react";
 import styled from "styled-components";
 
 import Counter from "./containers/counter";
+import TimeLine from "./containers/tasksList";
 
-const Root = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+const Container = styled.div`
+  display: flex;
 `;
 
 const App = () => {
   return (
-    <Root>
+    <Container>
+      <TimeLine />
       <Counter />
-    </Root>
+    </Container>
   );
 };
 
