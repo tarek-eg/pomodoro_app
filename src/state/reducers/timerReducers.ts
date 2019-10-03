@@ -20,8 +20,8 @@ export interface IStateTimer {
 
 const initialState: IStateTimer = {
   counting: false,
-  timeLeft: new Time(),
-  duration: new Time(),
+  timeLeft: new Time(0, 10),
+  duration: new Time(0, 10),
   notifications: []
 };
 
