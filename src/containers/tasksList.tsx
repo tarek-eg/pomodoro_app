@@ -14,16 +14,21 @@ import { IRootState } from "../state";
 import { Time } from "../time";
 import { PlayButton } from "../components/playButtons";
 import { deletePomodoro } from "../state/actions/timerActions";
+import { media } from "../utils/media";
 
 const Container = styled.aside`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   text-align: center;
   background: #fff;
-  height: 100vh;
   overflow-y: auto;
   min-width: 250px;
+  height: auto;
+
+  ${media.tablet`
+    height: 100vh;
+  `}
 `;
 
 const List = styled.ul`

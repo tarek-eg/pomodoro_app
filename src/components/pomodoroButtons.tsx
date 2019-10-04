@@ -6,6 +6,7 @@ import {
   faCoffee,
   faBriefcase
 } from "@fortawesome/free-solid-svg-icons";
+import { media } from "../utils/media";
 
 const ButtonsContainer = styled.div`
   display: flex;
@@ -13,8 +14,8 @@ const ButtonsContainer = styled.div`
 `;
 
 export const PomodoroButton = styled.button`
-  width: 200px;
-  height: 200px;
+  width: 170px;
+  height: 170px;
   border-radius: 50%;
   border: 5px solid #8785a2;
   display: flex;
@@ -34,12 +35,25 @@ export const PomodoroButton = styled.button`
   &:active {
     transform: scale(0.97);
   }
+
+  ${media.tablet`
+  width: 200px;
+  height: 200px;
+
+  `}
 `;
 
 const BreakButton = styled(PomodoroButton)`
+  margin: 0;
+  width: 70px;
+  height: 70px;
+  font-size: 0.5rem;
+  ${media.tablet`
   width: 100px;
   height: 100px;
   font-size: 1rem;
+
+  `}
 `;
 
 const StyledIcon = styled(FontAwesomeIcon)`

@@ -20,6 +20,7 @@ const ButtonContainer = styled.div`
 const StyledButton = styled(PlayButton)`
   margin: 0;
   transition: all 0.2s ease-in-out;
+  border: none;
   &:active {
     transform: scale(0.97);
   }
