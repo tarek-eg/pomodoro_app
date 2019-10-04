@@ -27,9 +27,12 @@ export const PomodoroButton = styled.button`
   background: #ffe2e2;
   text-transform: uppercase;
   margin: 10px;
-  transition: background-color 0.2s ease-in;
+  transition: all 0.1s ease-in;
   &:hover {
     background-color: #ffc7c7;
+  }
+  &:active {
+    transform: scale(0.97);
   }
 `;
 
@@ -54,18 +57,24 @@ interface Props {
   handleClick(name: string, minutes: number, seconds?: number): any;
 }
 
+export enum TimeTypes {
+  LUNCH = "Lunch Break",
+  POMODORO = "Pomodoro",
+  COFFEE = "Coffe Break"
+}
+
 export const PomodoroButtons: React.FC<Props> = ({ handleClick }: Props) => {
   return (
     <ButtonsContainer>
-      <BreakButton onClick={handleClick("Lunch Break", 30)}>
+      <BreakButton onClick={handleClick(TimeTypes.LUNCH, 30)}>
         <Text>Lunch break</Text>
         <StyledIcon icon={faHamburger} />
       </BreakButton>
-      <PomodoroButton onClick={handleClick("Pomodor", 25)}>
+      <PomodoroButton onClick={handleClick(TimeTypes.POMODORO, 25)}>
         <Text>Pomodoro</Text>
         <PomodoroIcon icon={faBriefcase} />
       </PomodoroButton>
-      <BreakButton onClick={handleClick("Coffe Break", 0, 1)}>
+      <BreakButton onClick={handleClick(TimeTypes.COFFEE, 0, 1)}>
         <Text>Cofee break</Text>
         <StyledIcon icon={faCoffee} />
       </BreakButton>

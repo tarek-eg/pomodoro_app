@@ -3,7 +3,7 @@ import { filter, ignoreElements, tap } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 
 import { IRootActions, IRootState } from "../index";
-import { countDownFinished } from "../actions/timerActions";
+import { countDownFinished, deletePomodoro } from "../actions/timerActions";
 
 type EpicType = Epic<IRootActions, IRootActions, IRootState>;
 const SAVE_TIMEOUT = 1000;
@@ -19,9 +19,9 @@ export interface ICachedState {
   timeLine: SimpleTime[];
 }
 
-export const cacheSaveSettingsEpic: EpicType = (action$, state$) => {
+export const cacheSaveTimeLineEpic: EpicType = (action$, state$) => {
   return action$.pipe(
-    filter(isActionOf([countDownFinished])), // More?
+    filter(isActionOf([countDownFinished, deletePomodoro])), // More?
     tap(() => {
       if (saveTimer) {
         clearTimeout(saveTimer);
@@ -42,4 +42,4 @@ export const cacheSaveSettingsEpic: EpicType = (action$, state$) => {
   );
 };
 
-export const cacheEpics = combineEpics(cacheSaveSettingsEpic);
+export const cacheEpics = combineEpics(cacheSaveTimeLineEpic);

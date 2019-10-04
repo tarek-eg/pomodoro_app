@@ -18,9 +18,12 @@ export const PlayButton = styled.button`
   margin: 10px;
   cursor: pointer;
   text-transform: uppercase;
-  transition: background-color 0.2s ease-in;
+  transition: all 0.2s ease-in-out;
   &:hover {
     background: #ebebeb;
+  }
+  &:active {
+    transform: scale(0.97);
   }
 `;
 const ButtonLabel = styled.span`

@@ -14,26 +14,26 @@ export interface IStateTimer {
   timeLine: Time[];
 }
 
-const cache = () => {
+export const getCache = (): Time[] | undefined => {
   try {
     let cachedData = localStorage.getItem("cache");
+
     if (cachedData) {
       let t = JSON.parse(cachedData);
+
       return t.timeLine.map(
         (time: SimpleTime) => new Time(time.minutes, time.seconds, time.name)
       );
     }
-    return [];
-  } catch (e) {
-    console.log("no cache");
-  }
+  } catch (e) {}
 };
+
 const initialState: IStateTimer = {
   counting: false,
   timeLeft: new Time(0, 10),
   duration: new Time(0, 10),
   notifications: [],
-  timeLine: [...cache()]
+  timeLine: getCache() || []
 };
 
 export const timerReducers: Reducer<IStateTimer, IRootActions> = (
@@ -84,6 +84,15 @@ export const timerReducers: Reducer<IStateTimer, IRootActions> = (
         ...state,
         notifications: [action.payload, ...state.notifications]
       };
+    case Actions.DELETE_POMODORO: {
+      const timeLine = [...state.timeLine];
+      timeLine.splice(action.payload, 1);
+
+      return {
+        ...state,
+        timeLine
+      };
+    }
 
     default:
       return state;

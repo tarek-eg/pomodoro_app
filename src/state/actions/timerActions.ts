@@ -19,3 +19,7 @@ export const countDownFinished = createStandardAction(
 export const addNotification = createStandardAction(Actions.ADD_NOTIFICATION)<
   Notification
 >();
+
+export const deletePomodoro = createStandardAction(Actions.DELETE_POMODORO)<
+  number
+>();

@@ -12,13 +12,18 @@ import {
 
 import { IRootState } from "../state";
 import { Time } from "../time";
+import { PlayButton } from "../components/playButtons";
+import { deletePomodoro } from "../state/actions/timerActions";
 
 const Container = styled.aside`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: center;
   background: #fff;
   height: 100vh;
   overflow-y: auto;
+  min-width: 250px;
 `;
 
 const List = styled.ul`
@@ -45,14 +50,23 @@ const Text = styled.span`
 `;
 
 const StyledIcon = styled(FontAwesomeIcon)`
-  &:not(:last-of-type) {
-    margin-right: 10px;
-  }
+  margin-right: 10px;
 `;
 
-const DeleteIcon = styled(FontAwesomeIcon)`
-  cursor: pointer;
+const DeleteButton = styled(PlayButton)`
+  display: flex;
   font-size: 1.2rem;
+  margin: 0;
+  background: transparent;
+  border: none;
+  padding: 0 5px;
+  transition: all 0.2s ease-in-out;
+  &:active {
+    transform: scale(0.97);
+  }
+`;
+const Title = styled.h2`
+  margin: 5px 0;
 `;
 
 interface IStateProps {
@@ -74,9 +88,16 @@ const mapState = ({ timer }: IRootState): IStateProps => ({
   timeLine: timer.timeLine
 });
 
-const TasksList: React.FC<IStateProps> = ({ timeLine }) => {
+const mapActions = { deletePomodoro };
+
+type DispatchProps = typeof mapActions;
+
+type Props = DispatchProps & IStateProps;
+
+const TasksList: React.FC<Props> = ({ timeLine, deletePomodoro }) => {
   return (
     <Container>
+      <Title>Time Line</Title>
       <List>
         {timeLine.map((time, index) => {
           console.log(time);
@@ -86,7 +107,9 @@ const TasksList: React.FC<IStateProps> = ({ timeLine }) => {
               <Text>{time.name}</Text>
               <Text>|</Text>
               <Text>{time.toString()}</Text>
-              <DeleteIcon icon={faTimes} />
+              <DeleteButton onClick={() => deletePomodoro(index)}>
+                <FontAwesomeIcon icon={faTimes} />
+              </DeleteButton>
             </ListItem>
           );
         })}
@@ -95,4 +118,7 @@ const TasksList: React.FC<IStateProps> = ({ timeLine }) => {
   );
 };
 
-export default connect(mapState)(TasksList);
+export default connect(
+  mapState,
+  mapActions
+)(TasksList);
