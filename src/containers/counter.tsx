@@ -8,7 +8,6 @@ import { startTimer, stopTimer, setTime } from "../state/actions/timerActions";
 import { PomodoroButtons, TimeTypes } from "../components/pomodoroButtons";
 import { CountDown } from "../components/countDown";
 import { PlayButtons } from "../components/playButtons";
-import { getCache } from "../state/reducers/timerReducers";
 
 const Container = styled.div`
   display: flex;
@@ -57,7 +56,7 @@ const Counter: React.FC<Props> = ({
   };
 
   const setTaskTime = (
-    name: string,
+    name: TimeTypes,
     minutes: number,
     seconds: number = 0
   ) => () => {
@@ -74,24 +73,13 @@ const Counter: React.FC<Props> = ({
       )
     );
   };
-  const SumActualPomodoro = () => {
-    if (getCache()) {
-      const filtered = getCache()!.filter(
-        time => time.name === TimeTypes.POMODORO
-      );
-      console.log(getCache(), filtered);
-      const minutes = filtered.reduce((acc, curr) => acc + curr.minutes, 0);
-      const seconds = filtered.reduce((acc, curr) => acc + curr.seconds, 0);
-      console.log(minutes, seconds);
-      return Time.fromTime(new Time(minutes, seconds)).toString();
-    }
-    return "Nothing yet";
-  };
 
   return (
     <Container>
-      <h1>{SumActualPomodoro()}</h1>
-      <PomodoroButtons handleClick={setTaskTime} />
+      <PomodoroButtons
+        selectedButton={duration.name}
+        handleClick={setTaskTime}
+      />
 
       <CountDown changeTime={changeTime} timeLeft={timeLeft} />
 

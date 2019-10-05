@@ -4,7 +4,8 @@ import { IRootActions } from "../index";
 import { Actions } from "../actions/constants";
 
 import { Time } from "../../time";
-import { SimpleTime } from "../epics/cacheEpics";
+import { SimpleTime, storage } from "../epics/cacheEpics";
+import { TimeTypes } from "../../components/pomodoroButtons";
 
 export interface IStateTimer {
   counting: boolean;
@@ -12,28 +13,16 @@ export interface IStateTimer {
   duration: Time;
   notifications: ReadonlyArray<Notification>;
   timeLine: Time[];
+  config: { [key: string]: Time } | null;
 }
-
-export const getCache = (): Time[] | undefined => {
-  try {
-    let cachedData = localStorage.getItem("cache");
-
-    if (cachedData) {
-      let t = JSON.parse(cachedData);
-
-      return t.timeLine.map(
-        (time: SimpleTime) => new Time(time.minutes, time.seconds, time.name)
-      );
-    }
-  } catch (e) {}
-};
 
 const initialState: IStateTimer = {
   counting: false,
-  timeLeft: new Time(0, 10),
-  duration: new Time(0, 10),
+  timeLeft: new Time(25, 0, TimeTypes.POMODORO),
+  duration: new Time(25, 0, TimeTypes.POMODORO),
   notifications: [],
-  timeLine: getCache() || []
+  timeLine: storage.getTimeLineFromCache() || [],
+  config: storage.getConfigFromCache() || {}
 };
 
 export const timerReducers: Reducer<IStateTimer, IRootActions> = (
@@ -43,11 +32,22 @@ export const timerReducers: Reducer<IStateTimer, IRootActions> = (
   switch (action.type) {
     case Actions.SET_TIME:
       const time = Time.fromTime(action.payload);
+      let newConfig;
+
+      if (state.config) {
+        newConfig = { ...state.config, [time.name]: time };
+      } else {
+        newConfig = { [time.name]: time };
+      }
+      console.log(newConfig);
+
+      // storage.set()
 
       return {
         ...state,
         timeLeft: time,
-        duration: time
+        duration: time,
+        config: newConfig
       };
 
     case Actions.START_TIMER:

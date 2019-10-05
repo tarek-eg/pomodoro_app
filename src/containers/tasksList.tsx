@@ -65,6 +65,7 @@ const DeleteButton = styled(PlayButton)`
   background: transparent;
   border: none;
   padding: 0 5px;
+  color: #e23e57;
   transition: all 0.2s ease-in-out;
   &:active {
     transform: scale(0.97);
@@ -105,7 +106,6 @@ const TasksList: React.FC<Props> = ({ timeLine, deletePomodoro }) => {
       <Title>Time Line</Title>
       <List>
         {timeLine.map((time, index) => {
-          console.log(time);
           return (
             <ListItem isPomodoro={time.name === "Pomodoro"} key={index}>
               <StyledIcon icon={mapNameToIcon[time.name]} />{" "}

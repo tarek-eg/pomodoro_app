@@ -1,9 +1,15 @@
+import { TimeTypes } from "./components/pomodoroButtons";
+
 export class Time {
   public readonly minutes: number;
   public readonly seconds: number;
-  public readonly name: string;
+  public readonly name: TimeTypes;
 
-  constructor(minutes: number = 0, seconds: number = 0, name: string = "Task") {
+  constructor(
+    minutes: number = 0,
+    seconds: number = 0,
+    name: TimeTypes = TimeTypes.POMODORO
+  ) {
     this.minutes = Time.clamp(minutes, 0, 99);
     this.seconds = Time.clamp(seconds, 0, 59);
     this.name = name;
@@ -27,7 +33,7 @@ export class Time {
       newSeconds = 59;
     }
 
-    return new Time(newMinutes, newSeconds);
+    return new Time(newMinutes, newSeconds, time.name);
   }
 
   public equals(other: Time) {

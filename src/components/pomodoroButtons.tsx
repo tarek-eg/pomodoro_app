@@ -4,16 +4,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHamburger,
   faCoffee,
-  faBriefcase
+  faLaptopCode
 } from "@fortawesome/free-solid-svg-icons";
+
 import { media } from "../utils/media";
 
 const ButtonsContainer = styled.div`
   display: flex;
   position: relative;
+  margin-top: 20px;
+  ${media.tablet`
+    margin:0;
+  `}
 `;
 
-export const PomodoroButton = styled.button`
+export const PomodoroButton = styled.button<{ selected: boolean }>`
   width: 170px;
   height: 170px;
   border-radius: 50%;
@@ -25,20 +30,23 @@ export const PomodoroButton = styled.button`
   font-size: 1.5rem;
   font-weight: 600;
   cursor: pointer;
-  background: #ffe2e2;
+  background: ${({ selected }) => (selected ? "#ffc7c7" : "#ffe2e2")};
   text-transform: uppercase;
   margin: 10px;
   transition: all 0.1s ease-in;
   &:hover {
-    background-color: #ffc7c7;
+    background: #ffc7c7;
   }
   &:active {
     transform: scale(0.97);
   }
+  &:focus {
+    background: #ffc7c7;
+  }
 
   ${media.tablet`
-  width: 200px;
-  height: 200px;
+    width: 200px;
+    height: 200px;
 
   `}
 `;
@@ -69,6 +77,7 @@ const Text = styled.span`
 
 interface Props {
   handleClick(name: string, minutes: number, seconds?: number): any;
+  selectedButton: TimeTypes;
 }
 
 export enum TimeTypes {
@@ -77,18 +86,27 @@ export enum TimeTypes {
   COFFEE = "Coffe Break"
 }
 
-export const PomodoroButtons: React.FC<Props> = ({ handleClick }: Props) => {
+export const PomodoroButtons: React.FC<Props> = ({
+  handleClick,
+  selectedButton
+}: Props) => {
   return (
     <ButtonsContainer>
-      <BreakButton onClick={handleClick(TimeTypes.LUNCH, 30)}>
+      <BreakButton
+        selected={selectedButton === TimeTypes.LUNCH}
+        onClick={handleClick(TimeTypes.LUNCH, 30)}>
         <Text>Lunch break</Text>
         <StyledIcon icon={faHamburger} />
       </BreakButton>
-      <PomodoroButton onClick={handleClick(TimeTypes.POMODORO, 25)}>
-        <Text>Pomodoro</Text>
-        <PomodoroIcon icon={faBriefcase} />
+      <PomodoroButton
+        selected={selectedButton === TimeTypes.POMODORO}
+        onClick={handleClick(TimeTypes.POMODORO, 25)}>
+        <Text>Task</Text>
+        <PomodoroIcon icon={faLaptopCode} />
       </PomodoroButton>
-      <BreakButton onClick={handleClick(TimeTypes.COFFEE, 0, 1)}>
+      <BreakButton
+        selected={selectedButton === TimeTypes.COFFEE}
+        onClick={handleClick(TimeTypes.COFFEE, 0, 1)}>
         <Text>Cofee break</Text>
         <StyledIcon icon={faCoffee} />
       </BreakButton>

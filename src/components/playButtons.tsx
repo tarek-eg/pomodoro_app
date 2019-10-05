@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause } from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faPause, faSync } from "@fortawesome/free-solid-svg-icons";
 
 const PlayButtonsContainer = styled.div`
   display: flex;
@@ -19,6 +19,7 @@ export const PlayButton = styled.button`
   cursor: pointer;
   text-transform: uppercase;
   transition: all 0.2s ease-in-out;
+  color: #3f51b5;
   &:hover {
     background: #ebebeb;
   }
@@ -28,6 +29,10 @@ export const PlayButton = styled.button`
 `;
 const ButtonLabel = styled.span`
   margin-left: 5px;
+`;
+
+const ResetButton = styled(PlayButton)`
+  color: #ff4081;
 `;
 
 interface Props {
@@ -44,12 +49,12 @@ export const PlayButtons: React.FC<Props> = ({
   return (
     <PlayButtonsContainer>
       <PlayButton onClick={toggleTimer}>
-        <FontAwesomeIcon icon={faPlay} />{" "}
+        <FontAwesomeIcon icon={counting ? faPause : faPlay} />{" "}
         <ButtonLabel>{counting ? "Pause" : "Start"}</ButtonLabel>
       </PlayButton>
-      <PlayButton onClick={resetTimer}>
-        <FontAwesomeIcon icon={faPause} /> <ButtonLabel>Reset</ButtonLabel>
-      </PlayButton>
+      <ResetButton onClick={resetTimer}>
+        <FontAwesomeIcon icon={faSync} /> <ButtonLabel>Reset</ButtonLabel>
+      </ResetButton>
     </PlayButtonsContainer>
   );
 };
